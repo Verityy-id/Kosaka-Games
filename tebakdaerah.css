@@ -1,0 +1,661 @@
+/* ========================================
+   RESET & BASE STYLES
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+/* ========================================
+   CONTAINER
+   ======================================== */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   USERNAME SCREEN
+   ======================================== */
+.username-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    animation: fadeIn 0.6s ease;
+}
+
+.username-card {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: zoomIn 0.6s ease;
+    max-width: 500px;
+    width: 100%;
+}
+
+.username-card h1 {
+    color: #667eea;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.username-card .subtitle {
+    color: #666;
+    font-size: 1.1em;
+    margin-bottom: 30px;
+}
+
+.username-form {
+    margin-top: 30px;
+}
+
+.username-form label {
+    display: block;
+    color: #333;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.input-with-icon {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5em;
+    z-index: 1;
+}
+
+.username-form input {
+    width: 100%;
+    padding: 15px 20px 15px 60px;
+    font-size: 1.1em;
+    border: 3px solid #667eea;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.username-form input:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* Input Error State */
+.username-form input.error {
+    border-color: #f56565;
+    animation: shakeInput 0.5s ease;
+}
+
+.username-form input.error:focus {
+    border-color: #f56565;
+    box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.2);
+}
+
+/* ========================================
+   WARNING MESSAGE
+   ======================================== */
+.warning-message {
+    background: #fff5f5;
+    border: 2px solid #f56565;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideDown 0.4s ease;
+    box-shadow: 0 3px 10px rgba(245, 101, 101, 0.2);
+}
+
+.warning-icon {
+    font-size: 1.3em;
+    flex-shrink: 0;
+}
+
+.warning-message span:last-child {
+    color: #c53030;
+    font-size: 0.95em;
+    font-weight: 600;
+    text-align: left;
+    line-height: 1.4;
+}
+
+/* Success State */
+.username-form input.success {
+    border-color: #48bb78;
+}
+
+.username-form input.success:focus {
+    border-color: #48bb78;
+    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    position: relative;
+    animation: fadeInDown 0.6s ease;
+}
+
+.back-btn {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: 1.1em;
+    opacity: 0.95;
+}
+
+/* ========================================
+   SCORE BOARD
+   ======================================== */
+.score-board {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.8s ease;
+}
+
+.score-item {
+    text-align: center;
+}
+
+.score-item .label {
+    color: #666;
+    font-size: 0.95em;
+    margin: 0 5px;
+}
+
+.score-item .value {
+    color: #667eea;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.score-item .value.username {
+    font-size: 1.3em;
+}
+
+/* ========================================
+   TIMER
+   ======================================== */
+.timer-container {
+    background: white;
+    border-radius: 15px;
+    padding: 15px 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1s ease;
+}
+
+.timer-label {
+    color: #666;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.timer {
+    color: #667eea;
+    font-size: 2.5em;
+    font-weight: bold;
+    min-width: 80px;
+    text-align: center;
+}
+
+.timer.warning {
+    color: #f56565;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* ========================================
+   GAME CONTAINER
+   ======================================== */
+.game-container {
+    animation: fadeIn 1s ease;
+}
+
+/* ========================================
+   QUESTION CARD
+   ======================================== */
+.question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* ========================================
+   IMAGE CONTAINER
+   ======================================== */
+.image-container {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 25px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    background: #f7f9fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.image-container:hover img {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   QUESTION HINT
+   ======================================== */
+.question-hint h2 {
+    color: #667eea;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.question-hint p {
+    color: #333;
+    font-size: 1.2em;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f7f9fc;
+    border-radius: 10px;
+    border-left: 5px solid #667eea;
+}
+
+/* ========================================
+   OPTIONS CONTAINER
+   ======================================== */
+.options-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.option-btn {
+    background: white;
+    border: 3px solid #667eea;
+    color: #667eea;
+    padding: 20px;
+    border-radius: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+}
+
+.option-btn:hover:not(:disabled) {
+    background: #667eea;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.option-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Jawaban Benar */
+.option-btn.correct {
+    background: #48bb78;
+    border-color: #48bb78;
+    color: white;
+    animation: correctPulse 0.5s ease;
+}
+
+/* Jawaban Salah */
+.option-btn.wrong {
+    background: #f56565;
+    border-color: #f56565;
+    color: white;
+    animation: wrongShake 0.5s ease;
+}
+
+/* ========================================
+   BUTTON GROUP
+   ======================================== */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+}
+
+.btn-secondary {
+    background: white;
+    color: #667eea;
+    border: 3px solid #667eea;
+}
+
+.btn-secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+/* ========================================
+   FEEDBACK MESSAGE
+   ======================================== */
+.feedback {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    animation: slideInUp 0.5s ease;
+}
+
+.feedback.correct {
+    background: #48bb78;
+    color: white;
+}
+
+.feedback.wrong {
+    background: #f56565;
+    color: white;
+}
+
+/* ========================================
+   RESULT SCREEN
+   ======================================== */
+.result-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.result-card {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: zoomIn 0.6s ease;
+}
+
+.result-card h2 {
+    color: #667eea;
+    font-size: 2em;
+    margin-bottom: 30px;
+}
+
+.final-score {
+    margin: 30px 0;
+}
+
+.final-score p {
+    color: #666;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.final-score strong {
+    color: #667eea;
+    font-size: 1.3em;
+}
+
+.final-score h1 {
+    color: #667eea;
+    font-size: 4em;
+    margin: 20px 0;
+}
+
+#resultMessage {
+    color: #333;
+    font-size: 1.3em;
+    margin: 20px 0;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 100px;
+    }
+}
+
+@keyframes shakeInput {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+}
+
+@keyframes correctPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes wrongShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .back-btn {
+        position: static;
+        display: block;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .username-card {
+        padding: 30px 20px;
+    }
+    
+    .username-card h1 {
+        font-size: 1.8em;
+    }
+    
+    .question-card {
+        padding: 25px;
+    }
+    
+    .image-container {
+        height: 200px;
+    }
+    
+    .options-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .score-board {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .timer-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .result-card {
+        padding: 30px 20px;
+    }
+    
+    .final-score h1 {
+        font-size: 3em;
+    }
+}
