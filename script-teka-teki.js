@@ -70,14 +70,12 @@ const questionsData = [
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioContext;
 
-// Inisialisasi Audio Context (harus setelah user interaction)
 function initAudio() {
     if (!audioContext) {
         audioContext = new AudioContext();
     }
 }
 
-// Fungsi untuk membuat suara klik keyboard
 function playClickSound() {
     if (!audioContext) return;
     
@@ -97,7 +95,6 @@ function playClickSound() {
     oscillator.stop(audioContext.currentTime + 0.1);
 }
 
-// Fungsi untuk suara backspace
 function playBackspaceSound() {
     if (!audioContext) return;
     
@@ -117,7 +114,6 @@ function playBackspaceSound() {
     oscillator.stop(audioContext.currentTime + 0.15);
 }
 
-// Fungsi untuk suara tombol action (help, clear, check)
 function playButtonSound() {
     if (!audioContext) return;
     
@@ -137,40 +133,36 @@ function playButtonSound() {
     oscillator.stop(audioContext.currentTime + 0.2);
 }
 
-// Fungsi untuk suara jawaban benar
 function playCorrectSound() {
     if (!audioContext) return;
     
-    // Nada pertama
     const osc1 = audioContext.createOscillator();
     const gain1 = audioContext.createGain();
     osc1.connect(gain1);
     gain1.connect(audioContext.destination);
-    osc1.frequency.value = 523; // C5
+    osc1.frequency.value = 523;
     osc1.type = 'sine';
     gain1.gain.setValueAtTime(0.3, audioContext.currentTime);
     gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
     osc1.start(audioContext.currentTime);
     osc1.stop(audioContext.currentTime + 0.3);
     
-    // Nada kedua
     const osc2 = audioContext.createOscillator();
     const gain2 = audioContext.createGain();
     osc2.connect(gain2);
     gain2.connect(audioContext.destination);
-    osc2.frequency.value = 659; // E5
+    osc2.frequency.value = 659;
     osc2.type = 'sine';
     gain2.gain.setValueAtTime(0.3, audioContext.currentTime + 0.1);
     gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
     osc2.start(audioContext.currentTime + 0.1);
     osc2.stop(audioContext.currentTime + 0.4);
     
-    // Nada ketiga
     const osc3 = audioContext.createOscillator();
     const gain3 = audioContext.createGain();
     osc3.connect(gain3);
     gain3.connect(audioContext.destination);
-    osc3.frequency.value = 784; // G5
+    osc3.frequency.value = 784;
     osc3.type = 'sine';
     gain3.gain.setValueAtTime(0.3, audioContext.currentTime + 0.2);
     gain3.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
@@ -178,7 +170,6 @@ function playCorrectSound() {
     osc3.stop(audioContext.currentTime + 0.6);
 }
 
-// Fungsi untuk suara jawaban salah
 function playWrongSound() {
     if (!audioContext) return;
     
@@ -199,7 +190,6 @@ function playWrongSound() {
     oscillator.stop(audioContext.currentTime + 0.5);
 }
 
-// Fungsi untuk suara hint/bantuan
 function playHintSound() {
     if (!audioContext) return;
     
@@ -220,7 +210,6 @@ function playHintSound() {
     oscillator.stop(audioContext.currentTime + 0.3);
 }
 
-// Fungsi untuk suara warning
 function playWarningSound() {
     if (!audioContext) return;
     
@@ -241,9 +230,9 @@ function playWarningSound() {
 }
 
 // ========================================
-// VARIABEL GAME
+// VARIABEL GAME - PERBAIKAN: Tambah helpUsedThisQuestion
 // ========================================
-let questions = []; // Akan diisi dengan soal yang sudah di-shuffle
+let questions = [];
 let username = "";
 let currentQuestionIndex = 0;
 let score = 0;
@@ -251,9 +240,10 @@ let correctAnswerCount = 0;
 let wrongAnswerCount = 0;
 let helpRemaining = 3;
 let helpUsedTotal = 0;
+let helpUsedThisQuestion = 0; // ★ BARU: Track hint per soal
 let currentAnswer = [];
 let correctAnswer = "";
-let fullAnswer = ""; // Jawaban lengkap dengan spasi
+let fullAnswer = "";
 let revealedLetters = new Set();
 let timer = 50;
 let timerInterval = null;
@@ -321,18 +311,15 @@ function shuffleArray(array) {
 usernameForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    // Inisialisasi audio saat user pertama kali berinteraksi
     initAudio();
     
     const inputValue = usernameInput.value.trim();
     
     if (inputValue.length < 2) {
-        // Tampilkan peringatan yang lebih bagus
         playWarningSound();
         usernameInput.classList.add('error-shake');
         showUsernameError('Nama harus minimal 2 karakter!');
         
-        // Hapus efek shake setelah animasi selesai
         setTimeout(() => {
             usernameInput.classList.remove('error-shake');
         }, 500);
@@ -344,11 +331,9 @@ usernameForm.addEventListener('submit', (e) => {
     displayUsername.textContent = username;
     resultUsername.textContent = username;
     
-    // Hide username screen, show game
     usernameScreen.style.display = 'none';
     mainScreen.style.display = 'block';
     
-    // Shuffle soal dan mulai game
     questions = shuffleArray(questionsData);
     initGame();
 });
@@ -357,13 +342,11 @@ usernameForm.addEventListener('submit', (e) => {
 // FUNGSI SHOW USERNAME ERROR
 // ========================================
 function showUsernameError(message) {
-    // Hapus error sebelumnya jika ada
     const existingError = document.querySelector('.username-error');
     if (existingError) {
         existingError.remove();
     }
     
-    // Buat elemen error
     const errorDiv = document.createElement('div');
     errorDiv.className = 'username-error';
     errorDiv.innerHTML = `
@@ -371,10 +354,8 @@ function showUsernameError(message) {
         <span class="error-text">${message}</span>
     `;
     
-    // Tambahkan ke form
     usernameForm.appendChild(errorDiv);
     
-    // Hapus setelah 3 detik
     setTimeout(() => {
         errorDiv.style.opacity = '0';
         setTimeout(() => errorDiv.remove(), 300);
@@ -392,7 +373,7 @@ function initGame() {
 }
 
 // ========================================
-// CREATE KEYBOARD (DENGAN SOUND)
+// CREATE KEYBOARD
 // ========================================
 function createKeyboard() {
     keyboard.innerHTML = '';
@@ -404,7 +385,6 @@ function createKeyboard() {
             const button = document.createElement('button');
             button.className = 'key-btn';
             
-            // Khusus untuk tombol backspace
             if (letter === '⌫') {
                 button.classList.add('backspace-btn');
                 button.innerHTML = '<span class="backspace-icon">⌫</span>';
@@ -432,31 +412,25 @@ function createKeyboard() {
 // TIMER FUNCTIONS
 // ========================================
 function startTimer() {
-    // Reset timer
     timer = 50;
     timerDisplay.textContent = timer;
     timerDisplay.classList.remove('warning');
     
-    // Clear previous interval if exists
     if (timerInterval) {
         clearInterval(timerInterval);
     }
     
-    // Start new interval
     timerInterval = setInterval(() => {
         timer--;
         timerDisplay.textContent = timer;
         
-        // Warning pada 5 detik terakhir
         if (timer <= 10) {
             timerDisplay.classList.add('warning');
-            // Play warning sound pada detik terakhir
             if (timer === 10 || timer === 5 || timer === 1) {
                 playWarningSound();
             }
         }
         
-        // Waktu habis
         if (timer <= 0) {
             clearInterval(timerInterval);
             timeUp();
@@ -475,17 +449,15 @@ function timeUp() {
     playWrongSound();
     wrongAnswerCount++;
     
-    // Disable buttons
     checkBtn.disabled = true;
     clearBtn.disabled = true;
     helpBtn.disabled = true;
     document.querySelectorAll('.key-btn').forEach(btn => btn.disabled = true);
     
-    // PERBAIKAN: Show correct answer dengan mapping yang benar
     const boxes = document.querySelectorAll('.letter-box:not(.space)');
     boxes.forEach((box) => {
         const actualIndex = parseInt(box.dataset.index);
-        box.textContent = correctAnswer[actualIndex]; // Gunakan correctAnswer (tanpa spasi)
+        box.textContent = correctAnswer[actualIndex];
         box.classList.add('wrong');
     });
     
@@ -494,24 +466,22 @@ function timeUp() {
 }
 
 // ========================================
-// LOAD QUESTION
+// LOAD QUESTION - PERBAIKAN: Reset helpUsedThisQuestion
 // ========================================
 function loadQuestion() {
-    // Reset state
     currentAnswer = [];
     revealedLetters.clear();
+    helpUsedThisQuestion = 0; // ★ RESET untuk soal baru
     feedback.style.display = 'none';
     nextContainer.style.display = 'none';
     checkBtn.disabled = false;
     clearBtn.disabled = false;
     
-    // Reset tombol help untuk setiap soal
     if (helpRemaining > 0) {
         helpBtn.disabled = false;
         helpBtn.classList.remove('disabled');
     }
     
-    // Enable all keyboard buttons
     document.querySelectorAll('.key-btn').forEach(btn => {
         btn.disabled = false;
         btn.classList.remove('used', 'correct', 'wrong', 'revealed');
@@ -519,25 +489,19 @@ function loadQuestion() {
     
     const question = questions[currentQuestionIndex];
     
-    // Simpan jawaban lengkap (dengan spasi) dan tanpa spasi terpisah
     fullAnswer = question.answer;
     correctAnswer = question.answer.replace(/\s/g, '');
     
-    // Update progress
     currentQuestion.textContent = currentQuestionIndex + 1;
     const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
     progressFill.style.width = progress + '%';
     
-    // Load media as HTML img element
     loadMediaAsHTML(question);
     
-    // Update question text
     questionText.textContent = question.question;
     
-    // Create letter boxes
     createLetterBoxes();
     
-    // Start timer
     startTimer();
 }
 
@@ -550,7 +514,6 @@ function loadMediaAsHTML(question) {
     if (question.mediaType === 'image') {
         const img = document.createElement('img');
         
-        // Gunakan imgSrc jika ada, jika tidak gunakan mediaUrl
         if (question.imgSrc) {
             img.src = question.imgSrc;
         } else if (question.mediaUrl) {
@@ -560,7 +523,6 @@ function loadMediaAsHTML(question) {
         img.alt = 'Gambar Soal';
         img.className = 'media-content';
         
-        // Error handling jika gambar gagal load
         img.onerror = function() {
             this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="400" height="300" fill="%23f0f0f0"/%3E%3Ctext x="50%25" y="50%25" font-size="20" text-anchor="middle" fill="%23999"%3EGambar tidak dapat dimuat%3C/text%3E%3C/svg%3E';
         };
@@ -583,8 +545,8 @@ function loadMediaAsHTML(question) {
 // ========================================
 function createLetterBoxes() {
     letterBoxes.innerHTML = '';
-    const answer = fullAnswer; // Gunakan fullAnswer
-    let letterIndex = 0; // Track index huruf (tanpa spasi)
+    const answer = fullAnswer;
+    let letterIndex = 0;
     
     for (let i = 0; i < answer.length; i++) {
         const box = document.createElement('div');
@@ -594,7 +556,7 @@ function createLetterBoxes() {
             box.className = 'letter-box space';
         } else {
             box.className = 'letter-box';
-            box.dataset.index = letterIndex; // Gunakan letterIndex untuk mapping
+            box.dataset.index = letterIndex;
             letterIndex++;
         }
         
@@ -618,12 +580,11 @@ function typeLetter(letter, button) {
 }
 
 // ========================================
-// DELETE LAST LETTER (BACKSPACE)
+// DELETE LAST LETTER
 // ========================================
 function deleteLastLetter() {
     const boxes = document.querySelectorAll('.letter-box:not(.space)');
     
-    // Cari kotak terakhir yang terisi dan bukan revealed
     for (let i = boxes.length - 1; i >= 0; i--) {
         if (boxes[i].textContent && !revealedLetters.has(parseInt(boxes[i].dataset.index))) {
             boxes[i].textContent = '';
@@ -635,7 +596,7 @@ function deleteLastLetter() {
 }
 
 // ========================================
-// CLEAR ANSWER (DENGAN SOUND)
+// CLEAR ANSWER
 // ========================================
 clearBtn.addEventListener('click', () => {
     playButtonSound();
@@ -656,7 +617,7 @@ clearBtn.addEventListener('click', () => {
 });
 
 // ========================================
-// HELP BUTTON
+// HELP BUTTON - PERBAIKAN: Gunakan helpUsedThisQuestion
 // ========================================
 helpBtn.addEventListener('click', () => {
     if (helpRemaining <= 0) {
@@ -668,7 +629,6 @@ helpBtn.addEventListener('click', () => {
     const boxes = document.querySelectorAll('.letter-box:not(.space)');
     const emptyIndices = [];
     
-    // Cari kotak yang kosong dan belum di-reveal
     boxes.forEach((box) => {
         const actualIndex = parseInt(box.dataset.index);
         if (!box.textContent && !revealedLetters.has(actualIndex)) {
@@ -676,7 +636,6 @@ helpBtn.addEventListener('click', () => {
         }
     });
     
-    // Notifikasi jika semua kotak terisi
     if (emptyIndices.length === 0) {
         playWarningSound();
         showFeedback('✅ Semua kotak sudah terisi! Cek jawabanmu atau hapus untuk menggunakan bantuan.', 'warning');
@@ -685,15 +644,13 @@ helpBtn.addEventListener('click', () => {
     
     playHintSound();
     
-    // Pilih random dari kotak kosong dan ambil huruf yang benar
     const randomItem = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-    const correctLetter = correctAnswer[randomItem.actualIndex]; // Gunakan correctAnswer (tanpa spasi)
+    const correctLetter = correctAnswer[randomItem.actualIndex];
     
     randomItem.box.textContent = correctLetter;
     randomItem.box.classList.add('revealed');
     revealedLetters.add(randomItem.actualIndex);
     
-    // Highlight tombol keyboard yang sesuai
     document.querySelectorAll('.key-btn').forEach(btn => {
         if (btn.dataset.letter === correctLetter) {
             btn.classList.add('revealed');
@@ -702,6 +659,7 @@ helpBtn.addEventListener('click', () => {
     
     helpRemaining--;
     helpUsedTotal++;
+    helpUsedThisQuestion++; // ★ INCREMENT hint untuk soal ini
     helpCount.textContent = helpRemaining;
     
     if (helpRemaining === 0) {
@@ -713,7 +671,7 @@ helpBtn.addEventListener('click', () => {
 });
 
 // ========================================
-// CHECK ANSWER (DENGAN SOUND)
+// CHECK ANSWER - PERBAIKAN: Gunakan helpUsedThisQuestion
 // ========================================
 checkBtn.addEventListener('click', () => {
     const boxes = document.querySelectorAll('.letter-box:not(.space)');
@@ -731,10 +689,8 @@ checkBtn.addEventListener('click', () => {
     
     playButtonSound();
     
-    // Stop timer
     stopTimer();
     
-    // Disable buttons
     checkBtn.disabled = true;
     clearBtn.disabled = true;
     helpBtn.disabled = true;
@@ -744,7 +700,7 @@ checkBtn.addEventListener('click', () => {
         // BENAR
         playCorrectSound();
         correctAnswerCount++;
-        const points = 10 - helpUsedTotal;
+        const points = 10 - helpUsedThisQuestion; // ★ GUNAKAN helpUsedThisQuestion
         score += Math.max(points, 5);
         scoreDisplay.textContent = score;
         
@@ -760,7 +716,6 @@ checkBtn.addEventListener('click', () => {
         playWrongSound();
         wrongAnswerCount++;
         
-        // Bandingkan dengan mapping yang benar
         boxes.forEach((box) => {
             if (!box.classList.contains('space')) {
                 const actualIndex = parseInt(box.dataset.index);
@@ -789,7 +744,7 @@ function showFeedback(message, type) {
 }
 
 // ========================================
-// NEXT QUESTION (DENGAN SOUND)
+// NEXT QUESTION
 // ========================================
 nextBtn.addEventListener('click', () => {
     playButtonSound();
@@ -837,6 +792,5 @@ function showResult() {
 // JALANKAN SAAT HALAMAN DIMUAT
 // ========================================
 window.addEventListener('DOMContentLoaded', () => {
-    // Fokus ke input username
     usernameInput.focus();
 });
